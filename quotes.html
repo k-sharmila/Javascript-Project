@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<style>
+        div {
+    text-align: center;
+}
+body{
+    background-color: aqua;
+}
+h1 {
+    font-size: 80px;
+    font-family: Impact;
+}
+
+button {
+    width: 250px;
+    height: 80px;
+    background-color: rgb(255, 0, 140);
+    color: white;
+}
+
+p{
+    font-size: 35px;
+}
+
+
+    </style>
+    <script>
+        const arrayOfQuotes = [
+    {'author': 'Jim Rohn', 
+     'quote': 'Beware of what you become in pursuit of what you want.'
+    },
+    {'author': 'Epictetus', 
+     'quote': 'It is not what happens to you, but how you react to it that matters.'
+    },
+    {'author': 'Frank Sinatra', 
+     'quote': 'The best revenge is massive success.'
+    },
+    {'author': 'Oscar Wilde', 
+     'quote': 'Life is never fair, and perhaps it is a good thing for most of us that it is not.'
+    },
+    {'author': 'Maya Angelou', 
+     'quote': 'You will face many defeats in life, but never let yourself be defeated.'
+    },
+    {'author': 'Walt Disney', 
+     'quote': 'The way to get started is to quit talking and begin doing.'
+    },
+];
+
+function generateQuote(){
+    const random = Number.parseInt(Math.random()*arrayOfQuotes.length + 1);
+    document.querySelector('#quoteOutput').textContent = `\"${arrayOfQuotes[random].quote}\"`;
+    document.querySelector('#authorOutput').textContent = `--${arrayOfQuotes[random].author}`;
+    
+}
+    </script>
+    <title>Quotes App</title>
+</head>
+<body>
+    <div>
+        <h1><i>Quote of the Day</i></h1>
+        <p><i>Click on the button below to recieve a random quote!</i></p>
+
+        <button onclick="generateQuote();"><h2>New Quote</h2></button>
+        <p id="quoteOutput"></p>
+        <p id="authorOutput"></p>
+    </div>
+   
+</body>
+</html>
