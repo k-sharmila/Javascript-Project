@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <style>
+      body{
+    background-color: lightblue;
+}
+
+form{
+    background-color: rgb(155, 223, 135);
+    width: 50%;
+    color: white;
+    margin: 50px auto;
+    padding: 50px;
+    box-sizing: border-box;
+}
+
+form h1{
+    text-align: center;
+}
+
+form input#todo-input{
+    box-sizing: border-box;
+    width: 75%;
+    height: 35px;
+    padding-left: 35px;
+}
+
+#add-item{
+   height: 35px;
+    width: 45%;
+    background-color: rgb(53, 21, 139);
+    color: white;
+    border-style:none ;
+}
+
+ul {
+    list-style: none;
+    list-style-position: outside;
+    margin: 0;
+    padding: 25px 0;
+}
+li{
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 10px;
+}
+
+.delete-item{
+    background-color: yellow;
+    border-radius: 5px;
+    border:none;
+    color: black;
+    width: 50px;
+    text-align: center;
+}
+
+.delete-item:hover{
+    background-color: orange;
+    width: 55px;
+}
+  </style>
+    <title>Todo List</title>
+</head>
+<body>
+    <form action="" id="form">
+        <h1><i>Todo List</i></h1>
+       <input id="todo-input"><br><button id="add-item"><i>Add Task</i></button>
+        <ul>
+            
+        </ul>
+    </form>
+    <script>
+        let form = document.getElementById('form');
+
+//items array for new items
+let items = [];
+
+//function call to check local storage and display items, if any.
+displayLocalStorage();
+
+//submit new items to todolist
+form.addEventListener('submit', function(e){
+    e.preventDefault();
+    //grab input from
+    let todoInput = document.getElementById('todo-input').value;
+    //if input is blank do nothing
+    if (todoInput === ""){
+        alert('Please enter valid input!');
+    }
+    else {
+        //display items
+        displayItems(todoInput);
+        //Place todoItem in localStorage
+        storeItem(todoInput);
+        //Clear the todo item field
+        document.getElementById('todo-input').value = '';
+        //add an event listener to the delete button
+        addDeleteFunction(todoInput);
+    }
+});
+
+
+function storeItem(item){
+    items.push(item);
+    localStorage.setItem('item',JSON.stringify(items));
+};
+
+
+function displayItems(todoInput){
+
+    let todoItem = document.createElement('li');
+    
+    todoItem.innerHTML = `${todoInput}<div class="delete-item">Delete</div>`;
+    //Display the todo item
+    let todoList = document.querySelector('ul');
+    todoList.appendChild(todoItem);
+};
+
+function displayLocalStorage(){
+    let storage = localStorage.getItem('item');
+    
+    if (storage === null){
+        items = [];
+    } else {
+        let storageParsed = JSON.parse(storage);
+        storageParsed.forEach(function(storageItem){
+            displayItems(storageItem);
+        })
+    };
+};
+
+function addDeleteFunction(todoInput){
+    
+    let deleteButton = document.querySelectorAll('.delete-item');
+    
+    deleteButton.forEach(function(button, index){
+        button.addEventListener('click', function(e){
+            console.log(e.path[1].childNodes);
+           
+            
+           let deletedStorage = localStorage.getItem('item');
+           let deletedStorageParsed = JSON.parse(deletedStorage);
+
+                deletedStorageParsed.splice(index, 1);
+                console.log(deletedStorageParsed);
+                localStorage.setItem('item',JSON.stringify(deletedStorageParsed));
+            if(deletedStorageParsed.length === 0){
+                let todoList = document.querySelector('ul');
+                todoList.innerHTML = '';
+                let todoItem = document.createElement('li');
+                todoItem.innerHTML = `No more todos!`;
+                
+                todoList.appendChild(todoItem);
+                displayLocalStorage();
+               
+                
+                
+
+            } else {
+                localStorage.setItem('item',JSON.stringify(deletedStorageParsed));
+            }
+            
+
+        })
+    })
+}
+    </script>
+</body>
+</html>
