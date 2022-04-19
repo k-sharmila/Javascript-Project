@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <style>
+       @import url(http://fonts.googleapis.com/css?family=Rokkitt);
+ body{
+           background-color: aqua;
+       }
+h1 {
+    font-family: 'Rokkitt', serif;
+    text-align: center;
+    color: #fff;
+    font-size: 35px;
+}
+
+ul{
+    list-style: none;
+}
+
+li{
+    font-family: 'Rokkitt', serif;
+    font-size: 2em;
+    color: #feb135;
+}
+
+input[type=radio]{
+    border: 0px;
+    width: 20px;
+    height: 2em;
+}
+
+p{
+    font-family: 'Rokkitt', serif;
+}
+
+/* Quiz Classes */
+.quizContainer {
+    background-color: #738843;
+    border-radius: 8px;
+    width: 75%;
+    margin: auto;
+    margin-top: 190px;
+    padding-top: 5px;
+    position: relative;
+}
+.nextButton{
+    border-radius: 6px;
+    width: 150px;
+    height: 40px;
+    text-align: center;
+    background-color: #1dd32c;
+    /*clear: both;*/
+    color:#fff;
+    font-family: 'Rokkitt', serif;
+    font-weight: bold;
+    position: relative;
+    margin: auto;
+    padding-top: 20px;
+}
+
+.question{
+    font-family: 'Rokkitt', serif;
+    font-size: 2em;
+    width: 90%;
+    height: auto;
+    margin: auto;
+    border-radius: 6px;
+    background-color: #ebbdd8;
+    text-align: center;
+    color: #27aa63;
+}
+
+.quizMessage{
+    background-color: peachpuff;
+    border-radius: 6px;
+    width: 30%;
+    margin: auto;
+    text-align: center;
+    padding: 2px;
+    font-family: 'Rokkitt', serif;
+    color: rgb(71, 8, 43);
+}
+
+.choiceList {
+    font-family: 'Courier New', Courier, monospace;
+    color: blueviolet;
+}
+
+.result {
+    width: 30%;
+    height: auto;
+    border-radius: 6px;
+    background-color: linen;
+    margin: auto;
+    margin-bottom: 35px;
+    text-align: center;
+    font-family: 'Rokkitt', serif;
+}
+   </style>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    <title>Baby animal names</title>
+</head>
+<body>
+    <div class="quizContainer">
+    <h1><i>Choose the correct answers for the questions!</i></h1>
+    
+    <div class="question"></div>
+    <ul class="choiceList"></ul>
+    <div class="quizMessage"></div>
+    <div class="result"></div>
+    <div class="nextButton"><i>Next Question</i></div>
+    <br>
+    </div>
+
+    <script text="text/javascript">
+        var questions = [
+    {
+        question: 'Who was the first President of India?',
+        choices: ['Mahatma Gandhi', 'Dr. Rajendra Prasad', 'Jawaharlal Nehru', 'Abdul kalam'],
+        correctAnswer:1
+    },
+    {
+        question: ' Who was the first Prime Minister of India?',
+        choices: ['Mahatma Gandhi', 'Dr. Rajendra Prasad', 'Jawaharlal Nehru', 'Abdul kalam'],
+        correctAnswer:2
+    },
+    {
+        question: 'Brain of computer is?',
+        choices: ['Monitor', 'keyboard', 'CPU', 'Mouse'],
+        correctAnswer:2
+    },
+    {
+        question: 'Giddha is the folk dance of?',
+        choices: ['punjab', 'Goa', 'Gujarat', 'Nepal'],
+        correctAnswer:0
+    },
+    {
+        question: 'Which animal has hump on its back?',
+        choices: ['giraffee', 'Lion', 'camel', 'Tiger'],
+        correctAnswer:2
+    }
+];
+
+var currentQuestion = 0;
+var correctAnswers = 0;
+var quizOver = false;
+
+window.addEventListener('DOMContentLoaded', function(e){
+    displayCurrentQuestion();
+
+    var quizMessage = document.querySelector('.quizMessage');
+
+        quizMessage.style.display = 'none';
+
+    document.querySelector('.nextButton').addEventListener('click', function(){
+        
+        if(!quizOver){
+            var radioBtnsChecked = document.querySelector('input[type=radio]:checked');
+
+            if (radioBtnsChecked === null){
+                quizMessage.innerText = 'Please select an answer';
+                quizMessage.style.display = 'block';
+            } else {
+                console.log(radioBtnsChecked.value);
+                quizMessage.style.display = 'none';
+                if (parseInt(radioBtnsChecked.value) === questions[currentQuestion].correctAnswer){
+                    correctAnswers++;
+                }
+
+                currentQuestion++;
+
+                if (currentQuestion < questions.length){
+                    displayCurrentQuestion();
+                } else {
+                    displayScore();
+                    document.querySelector('.nextButton').innerText = 'Play Again?';
+                    quizOver = true;
+                 }
+                }   
+        } else {
+            quizOver = false;
+            document.querySelector('.nextButton').innerText = 'Next Question';
+            resetQuiz();
+            displayCurrentQuestion();
+            hideScore();
+        }
+    });
+});
+
+function displayCurrentQuestion(){
+    console.log('In display current Questions');
+
+    var question = questions[currentQuestion].question;
+    var questionClass = document.querySelector('.quizContainer > .question');
+    var choiceList = document.querySelector('.quizContainer > .choiceList');
+    var numChoices = questions[currentQuestion].choices.length;
+
+    //Set the questionClass text to the current question
+    questionClass.innerText = question;
+
+    //Remove all current <li> elements (if any)
+    choiceList.innerHTML = '';
+
+    var choice;
+    for (i = 0; i < numChoices; i++){
+        choice = questions[currentQuestion].choices[i];
+        var li = document.createElement('li');
+            li.innerHTML = '<li><input type="radio" value="' + i + '" name="dynradio" />' + choice + '</li>'
+        choiceList.appendChild(li);
+
+    }
+}
+
+function resetQuiz(){
+    currentQuestion = 0;
+    correctAnswers = 0;
+    hideScore();
+}
+
+function displayScore(){
+    document.querySelector('.quizContainer > .result').innerText = 'You scored: ' + correctAnswers + ' out of ' + questions.length;
+    document.querySelector('.quizContainer > .result').style.display = 'block';
+}
+
+function hideScore(){
+    document.querySelector('.result').style.display = 'none';
+}
+    </script>
+</body>
+</html>
